@@ -192,6 +192,7 @@ JS1/Choa Chu Kang
 JS2/Choa Chu Kang West
 TE1/Woodlands North
 TE2/Woodlands
+TE3/Woodlands South
 TE15/Great World
 TE16/Havelock
 TE17/Outram park
