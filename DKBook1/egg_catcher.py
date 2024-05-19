@@ -1,6 +1,13 @@
 from itertools import cycle
 from random import randrange
 from tkinter import Canvas, Tk, messagebox, font
+import time
+from pygame import mixer
+
+mixer.init()
+beep = mixer.Sound("Beep.wav")
+time.sleep(5)
+
 
 canvas_width = 800
 canvas_height = 400
@@ -15,7 +22,7 @@ egg_height = 55
 egg_score = 10
 egg_speed = 500
 egg_interval = 4000
-difficulty_factor = 0.95
+difficulty_factor = 0.15
 
 catcher_color = 'blue'
 catcher_width = 100
@@ -67,6 +74,7 @@ def check_catch():
             eggs.remove(egg)
             c.delete(egg)
             increase_score(egg_score)
+            beep.play()
     root.after(100, check_catch)
 def increase_score(points):
     global score, egg_speed, egg_interval
