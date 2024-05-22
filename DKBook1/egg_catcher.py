@@ -1,6 +1,6 @@
 from itertools import cycle
 from random import randrange
-from tkinter import Canvas, Tk, messagebox, font
+from tkinter import Canvas, Tk, messagebox, font, PhotoImage
 import time
 from pygame import mixer
 
@@ -13,9 +13,15 @@ canvas_width = 800
 canvas_height = 400
 root = Tk()
 c = Canvas(root, width = canvas_width, height=canvas_height, background = 'deep sky blue')
-c.create_rectangle(-5, canvas_height - 100, canvas_width +5, canvas_height +5, fill = 'sea green', width = 0)
-c.create_oval(-80,-80,120,120,fill = 'Orange', width = 0)
+# First version
+# c.create_rectangle(-5, canvas_height - 100, canvas_width +5, canvas_height +5, fill = 'sea green', width = 0)
+# c.create_oval(-80,-80,120,120,fill = 'Orange', width = 0)
+
+# Second version
+bkgdPhoto = PhotoImage(file="newbackground.gif")
+c.create_image(0, -30, image=bkgdPhoto, anchor="nw")
 c.pack()
+
 color_cycle = cycle(['light blue', 'light green', 'light pink', 'light yellow', 'light cyan'])
 egg_width = 45
 egg_height = 55
@@ -24,7 +30,7 @@ egg_speed = 500
 egg_interval = 4000
 difficulty_factor = 0.15
 
-catcher_color = 'blue'
+catcher_color = 'white'
 catcher_width = 100
 catcher_height = 100
 catcher_start_x = canvas_width/2 - catcher_width/2
@@ -90,6 +96,7 @@ def move_right(event):
     (x1,x2,y1,y2) = c.coords(catcher)
     if x2 < canvas_width:
         c.move(catcher, 20, 0)
+
 c.bind('<Left>', move_left)
 c.bind('<Right>', move_right)
 c.focus_set()
