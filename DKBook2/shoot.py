@@ -29,7 +29,7 @@ def on_mouse_down(pos):
     global select_index
     global selected_fruit
     if selected_fruit.collidepoint(pos):
-        print("Good shot!")
+        print('good shot!')
         # method 1: random next fruit
         # selected_fruit = sample(fruits, 1)[0]
 
