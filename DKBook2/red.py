@@ -44,7 +44,7 @@ def get_colors_to_create(number_of_extra_stars):
         random_color = random.choice(COLORS)
         colors_to_create.append(random_color)
     return colors_to_create
-
+              
 def create_stars(colors_to_create):
     new_stars = []
     for color in colors_to_create:
