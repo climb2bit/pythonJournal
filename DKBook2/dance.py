@@ -134,7 +134,7 @@ def countdown():
     global count, game_over, show_countdown, say_dance
     if count > 1:
         count = count-1
-        #print (f'[DEBUG] {count}')      
+        print (f'[DEBUG] {count}')      
         clock.schedule(countdown, 1)
     elif say_dance == False:
         show_countdown = False
