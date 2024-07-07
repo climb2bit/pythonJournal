@@ -11,12 +11,9 @@ except ImportError:
 
 WIDTH, HEIGHT = bext.size()
 WIDTH -= 1
-# WIDTH, HEIGHT = 20, 10
 
-# Actual run
-NUMBER_OF_LOGOS = 1
-# Debug
-# NUMBER_OF_LOGOS = 1
+
+NUMBER_OF_LOGOS = 10
 PAUSE_AMOUNT = 0.2
 COLORS = ['red', 'green', 'blue', 'yellow', 'magenta', 'cyan', 'white']
 
@@ -40,11 +37,7 @@ def main():
                      Y: random.randint(1, HEIGHT - 4),
                      DIR: random.choice(DIRECTIONS)})
 
-      # # DEBUG
-      #  logos.append({COLOR: random.choice(COLORS),
-      #                X: WIDTH - 3,
-      #                Y: 0,
-      #                DIR: UP_RIGHT})
+      
        if logos[-1][X] % 2 == 1:
           logos[-1][X] -= 1
     cornerBounces = 0
@@ -55,19 +48,19 @@ def main():
           originalDirection = logo[DIR]
 
           if logo[X] == 0 and logo[Y] == 0:
-            #  logo[DIR] == DOWN_RIGHT
+          
              logo[DIR] = DOWN_RIGHT
              cornerBounces += 1
           elif logo[X] == 0 and logo[Y] == HEIGHT - 1:
-            #  logo[DIR] == UP_RIGHT
+          
              logo[DIR] = UP_RIGHT
              cornerBounces += 1
           elif logo[X] == WIDTH - 3 and logo[Y] == 0:
-            #  logo[DIR] == DOWN_LEFT             
+                       
              logo[DIR] = DOWN_LEFT             
              cornerBounces += 1             
           elif logo[X] == WIDTH - 3 and logo[Y] == HEIGHT - 1:
-            #  logo[DIR] == UP_LEFT
+          
              logo[DIR] = UP_LEFT
              cornerBounces += 1       
 
@@ -83,13 +76,13 @@ def main():
              logo[DIR] = DOWN_LEFT
           elif logo[Y] == 0 and logo[DIR] == UP_RIGHT:
              logo[DIR] = DOWN_RIGHT 
-          # suspect error here
+          
           elif logo[Y] == HEIGHT - 1 and logo[DIR] == DOWN_LEFT:
-          #  elif logo[Y] == HEIGHT - 3 and logo[DIR] == DOWN_LEFT:
+          
              logo[DIR] = UP_LEFT
-          # suspect error here
+          
           elif logo[Y] == HEIGHT - 1 and logo[DIR] == DOWN_RIGHT:
-         #  elif logo[Y] == WIDTH - 3 and logo[DIR] == DOWN_RIGHT:
+         
              logo[DIR] = UP_RIGHT
           if logo[DIR] != originalDirection:
               logo[COLOR] = random.choice(COLORS)
@@ -112,13 +105,13 @@ def main():
       print('Corner bounces:', cornerBounces, end = '')
 
       for logo in logos:
-         # to make sure the new position is within the valid range
-         # print (" ", logo[X], logo[Y], end = ' ')
+         
+         
          logo[X] = min(WIDTH-3, logo[X])
          logo[X] = max(0, logo[X])
          logo[Y] = min(HEIGHT - 1, logo[Y])
          logo[Y] = max(0, logo[Y])
-         # print (logo[X], logo[Y])
+         
          bext.goto(logo[X], logo[Y])
          bext.fg(logo[COLOR])
          print('DVD', end = '')
