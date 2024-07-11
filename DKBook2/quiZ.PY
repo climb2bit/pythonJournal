@@ -29,7 +29,9 @@ q4 = ["what year did the clementi rail accident happen?",
       "1987", "1990", "1993", "2013", 3]
 q5 = ["Where are the pyramids?",
       "India", "Egypt", "Morocco", "Canada", 2]
-questions = [q1,q2,q3,q4,q5]
+q6 = ["How old is the Ginza line in 2023?",
+      "99","98","97","96",4]
+questions = [q1,q2,q3,q4,q5,q6]
 question = questions.pop(0) 
 
 def draw():

@@ -13,7 +13,7 @@ house = Actor("house")
 house.pos = randint(800,1600), 460
 
 tree = Actor("tree")
-tree.pos = randint(800,1600), 450
+tree.pos = randint(800,1600), 20
 
 bird_up = True
 up = False
