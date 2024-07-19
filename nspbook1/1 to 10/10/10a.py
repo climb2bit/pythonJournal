@@ -4,12 +4,12 @@ while True:
     print('do you want to roll?')
     response = input('> ')
 
-    if response.lower()  == 'yes': 
+    if response.lower() in ['yes', 'y']: 
         print('roll, roll, roll!')
         dice = random.randint(1, 6)
         print(dice)
         continue
-    elif response.lower() == 'no':
+    elif response.lower().startswith('n'):
         print('Thanks for using!')
         sys.exit()
     else:
