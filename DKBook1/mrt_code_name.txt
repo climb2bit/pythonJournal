@@ -204,3 +204,11 @@ TE28/Siglap
 TE29/Bayshore
 TE22/Gardens By The Bay
 TE23/Tanjong Rhu
+TE30/Bedok South
+CC18/Bukit Brown
+TE18/Maxwell
+TE19/Shenton Way
+TE20/Marina Bay
+TE21/Marina South
+TE22A/Founders' Memorial
+TE31/Sungei Bedok
