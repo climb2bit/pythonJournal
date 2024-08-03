@@ -13,7 +13,7 @@ WIDTH, HEIGHT = bext.size()
 WIDTH -= 1
 
 
-NUMBER_OF_LOGOS = 10
+NUMBER_OF_LOGOS = 1000
 PAUSE_AMOUNT = 0.2
 COLORS = ['red', 'green', 'blue', 'yellow', 'magenta', 'cyan', 'white']
 
