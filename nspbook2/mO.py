@@ -100,14 +100,15 @@ def main():
 
     print('Creating notes...')
     for name, freq in list(pmNotes.items()):
-        filename = name + '.wav'
+        filename = os.path.join('sounds', name + '.wav')
+
         if not os.path.exists(filename) or args.display:
             data = generateNote(freq)
             print('creating ' + filename + '...')
             writeWAVE(filename, data)
         else:
             print('Filename already created. skipping...')
-        nplayer.add(name+'.wav')
+        nplayer.add(filename)
         time.sleep(0.5)
     if args.play:
         while True:
