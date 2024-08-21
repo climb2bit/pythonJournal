@@ -1,4 +1,6 @@
 '''Karplus-Strong'''
+'''Musical overtones'''
+'''python mO.py --display to display and python mO.py --play to play.'''
 
 import sys, os
 import time, random
