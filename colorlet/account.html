@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Account - Color Pack</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <a href="market.html">Market</a>
+    <a href="inventory.html">Inventory</a>
+    <a href="account.html">Account</a>
+    <button onclick="logout()" class="pack-button small red">Logout</button>
+  </div>
+
+  <h1>👤 Account Settings</h1>
+  <p>Logged in as: <strong id="currentUserDisplay"></strong></p>
+
+  <div>
+    <input type="text" id="newUsernameInput" placeholder="New username" />
+    <button class="pack-button" onclick="changeUsername()">Change Username</button>
+    <p id="changeUsernameMessage" style="color: red;"></p>
+  </div>
+
+  <br />
+  <button class="pack-button red" onclick="deleteAccount()">Delete Account</button>
+
+  <script src="script.js"></script>
+</body>
+</html>

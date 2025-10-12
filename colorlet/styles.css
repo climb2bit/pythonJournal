@@ -1,0 +1,106 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f4ff;
+  text-align: center;
+  padding: 50px;
+}
+
+h1 {
+  color: #333;
+}
+
+.pack-button {
+  background-color: #4a90e2;
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 5px;
+}
+
+.pack-button:hover {
+  background-color: #357ab8;
+}
+
+.pack-button.red {
+  background: #e94b4b;
+}
+
+.pack-button.small {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.result {
+  margin-top: 40px;
+  font-size: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  display: inline-block;
+  min-width: 300px;
+}
+
+.common {
+  background: #e0e0e0;
+  color: #333;
+}
+.uncommon {
+  background: #b2fab4;
+  color: #1b5e20;
+}
+.rare {
+  background: #ffcdd2;
+  color: #b71c1c;
+}
+.epic {
+  background: #e1bee7;
+  color: #6a1b9a;
+}
+.legendary {
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+  color: #6d1b7b;
+}
+.chroma {
+  background: linear-gradient(90deg, gold, silver);
+  color: #4e342e;
+  animation: shine 1s infinite alternate;
+}
+
+@keyframes shine {
+  from {
+    box-shadow: 0 0 10px gold;
+  }
+  to {
+    box-shadow: 0 0 20px silver;
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  max-width: 400px;
+  margin: 20px auto;
+  text-align: left;
+}
+
+ul li {
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  margin: 0 10px;
+  font-size: 18px;
+}

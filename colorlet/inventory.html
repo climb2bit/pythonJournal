@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventory - Color Pack</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <a href="market.html">Market</a>
+    <a href="inventory.html">Inventory</a>
+    <a href="account.html">Account</a>
+    <button onclick="logout()" class="pack-button small red">Logout</button>
+  </div>
+
+  <h1>📦 Your Inventory</h1>
+  <p>Logged in as: <strong id="currentUserDisplay"></strong></p>
+  <p>Tokens: <span id="tokenCount"></span></p>
+
+  <button class="pack-button" onclick="sellDuplicates()">Sell Duplicates</button>
+
+  <ul id="inventoryList"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>

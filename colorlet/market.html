@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Market - Color Pack</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <a href="market.html">Market</a>
+    <a href="inventory.html">Inventory</a>
+    <a href="account.html">Account</a>
+    <button onclick="logout()" class="pack-button small red">Logout</button>
+  </div>
+
+  <h1>🎨 Open Color Packs</h1>
+  <p>Logged in as: <strong id="currentUserDisplay"></strong></p>
+  <p>Tokens: <span id="tokenCount"></span></p>
+
+  <button class="pack-button" onclick="openColorPack()">Open Color Pack (25 Tokens)</button>
+  <button class="pack-button" onclick="claimDaily()">Claim Daily Reward</button>
+  <div class="tooltip-container">
+
+
+
+  <div id="result" class="result" style="display: none;"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
