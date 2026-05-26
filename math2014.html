@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMOPS 2014 Round 2 — Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f5f0e8;
+    --paper-dark: #ede5d4;
+    --accent: #c0392b;
+    --accent-light: #e8cfc9;
+    --gold: #b8860b;
+    --gold-light: #f0e4b0;
+    --teal: #1a6b6b;
+    --teal-light: #c0dede;
+    --rule: #8b7355;
+    --muted: #6b5a3e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Paper texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 27px,
+        rgba(139,115,85,0.08) 27px,
+        rgba(139,115,85,0.08) 28px
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 48px 0 40px;
+    border-bottom: 3px double var(--rule);
+    margin-bottom: 56px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .header h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .header-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 12px;
+  }
+
+  /* Problem cards */
+  .problem {
+    background: white;
+    border: 1px solid var(--paper-dark);
+    border-left: 5px solid var(--accent);
+    border-radius: 2px;
+    padding: 36px 40px;
+    margin-bottom: 40px;
+    box-shadow: 4px 4px 0 var(--paper-dark);
+    animation: fadeUp 0.6s ease both;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .problem:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0 var(--paper-dark);
+  }
+
+  .problem:nth-child(2) { animation-delay: 0.1s; border-left-color: var(--gold); }
+  .problem:nth-child(3) { animation-delay: 0.2s; border-left-color: var(--teal); }
+  .problem:nth-child(4) { animation-delay: 0.3s; border-left-color: var(--accent); }
+  .problem:nth-child(5) { animation-delay: 0.4s; border-left-color: var(--gold); }
+
+  .problem-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--paper-dark);
+  }
+
+  .problem-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    color: var(--accent);
+    line-height: 1;
+    min-width: 48px;
+  }
+
+  .problem:nth-child(2) .problem-num,
+  .problem:nth-child(5) .problem-num { color: var(--gold); }
+  .problem:nth-child(3) .problem-num { color: var(--teal); }
+
+  .problem-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+  }
+
+  /* Section blocks */
+  .section {
+    margin-bottom: 20px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--paper-dark);
+  }
+
+  .section p {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: #2a2010;
+  }
+
+  /* Math display */
+  .math-block {
+    background: var(--paper);
+    border: 1px solid var(--paper-dark);
+    border-radius: 3px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+
+  .math-block .highlight {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .math-block .comment {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Answer box */
+  .answer-box {
+    background: linear-gradient(135deg, var(--accent-light), #f8eded);
+    border: 2px solid var(--accent);
+    border-radius: 3px;
+    padding: 14px 20px;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .problem:nth-child(2) .answer-box,
+  .problem:nth-child(5) .answer-box {
+    background: linear-gradient(135deg, var(--gold-light), #faf4e0);
+    border-color: var(--gold);
+  }
+
+  .problem:nth-child(3) .answer-box {
+    background: linear-gradient(135deg, var(--teal-light), #e8f4f4);
+    border-color: var(--teal);
+  }
+
+  .answer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .answer-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+  }
+
+  .problem:nth-child(2) .answer-value,
+  .problem:nth-child(5) .answer-value { color: var(--gold); }
+  .problem:nth-child(3) .answer-value { color: var(--teal); }
+
+  /* Sub-parts (Q3) */
+  .sub-parts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .sub-part {
+    background: var(--paper);
+    border: 1px solid var(--paper-dark);
+    border-radius: 3px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .sub-part-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .sub-part-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--teal);
+  }
+
+  .sub-part-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Grid visual for Q3 */
+  .grid-demo {
+    display: flex;
+    gap: 28px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .grid-fig {
+    text-align: center;
+  }
+
+  .grid-fig-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .ytable {
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+
+  .ytable td {
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--teal);
+    background: var(--teal-light);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-align: center;
+    vertical-align: middle;
+    color: var(--teal);
+    font-weight: 500;
+  }
+
+  /* Dot grid for Q2 */
+  .dot-grid-wrap {
+    margin: 16px 0;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .dot-grid svg {
+    display: block;
+  }
+
+  /* Formula table for Q4 */
+  .digit-table {
+    display: flex;
+    gap: 0;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+
+  .digit-cell {
+    width: 34px;
+    height: 44px;
+    border: 1px solid var(--paper-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    background: var(--paper);
+    margin-right: -1px;
+    margin-bottom: -1px;
+  }
+
+  .digit-cell.found {
+    background: var(--gold-light);
+    color: var(--gold);
+    border-color: var(--gold);
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Step list */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+  }
+
+  .steps li {
+    counter-increment: step;
+    padding: 10px 0 10px 44px;
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    border-bottom: 1px dashed var(--paper-dark);
+  }
+
+  .steps li:last-child { border-bottom: none; }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 26px;
+    height: 26px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 50%;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+  }
+
+  /* Geometry figure for Q5 */
+  .geo-wrap {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  /* Key insight callout */
+  .callout {
+    background: linear-gradient(to right, var(--gold-light), transparent);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .callout strong { color: var(--ink); font-style: normal; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding-top: 40px;
+    border-top: 3px double var(--rule);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9em;
+    background: var(--paper);
+    padding: 1px 5px;
+    border-radius: 2px;
+    border: 1px solid var(--paper-dark);
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 32px 18px 60px; }
+    .problem { padding: 24px 20px; }
+    .sub-parts { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .digit-cell { width: 26px; height: 38px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="header-tag">Singapore Mathematical Olympiad for Primary Schools</div>
+    <h1>SMOPS 2014 &mdash; Round 2<br><em>Solutions Guide</em></h1>
+    <div class="header-sub">Problems 1 &ndash; 5 &nbsp;·&nbsp; Fully Worked Solutions</div>
+  </header>
+
+  <!-- ===== Q1 ===== -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">1</span>
+      <span class="problem-title">The Double-Counted Sum</span>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Problem</div>
+      <p>John summed the numbers 1 to <em>n</em>, but accidentally added one number twice, arriving at a total of <strong>3405</strong>. Find the number he added twice.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Key Idea</div>
+      <p>The true sum <code>1+2+…+n = n(n+1)/2</code>. Adding one extra copy of <em>x</em> gives the wrong total, so:</p>
+      <div class="math-block">Wrong total = n(n+1)/2 + x = 3405
+
+<span class="highlight">We need: n(n+1)/2 &lt; 3405 &lt; n(n+1)/2 + n</span>
+              (because 1 ≤ x ≤ n)</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Working</div>
+      <ol class="steps">
+        <li>Test <strong>n = 82</strong>: &nbsp; 82 × 83 / 2 = <strong>3403</strong>.</li>
+        <li>Remainder: &nbsp; 3405 − 3403 = <strong>2</strong>. &nbsp; And 2 ≤ 82 ✓</li>
+        <li>Test <strong>n = 81</strong>: &nbsp; 81 × 82 / 2 = 3321, remainder = 84 &gt; 81 ✗</li>
+        <li>Test <strong>n = 83</strong>: &nbsp; 83 × 84 / 2 = 3486 &gt; 3405 ✗ (impossible)</li>
+        <li>So <em>n</em> = 82 is the only valid choice, and <em>x</em> = 2.</li>
+      </ol>
+    </div>
+
+    <div class="answer-box">
+      <span class="answer-label">Answer</span>
+      <span class="answer-value">The number added twice is <strong>2</strong></span>
+    </div>
+  </div>
+
+  <!-- ===== Q2 ===== -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">2</span>
+      <span class="problem-title">Tilted Squares on a 5 × 4 Dot Grid</span>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Problem</div>
+      <p>Using dots arranged in a 5 × 4 grid as vertices, how many squares can be formed such that <em>none</em> of the sides are parallel to the edges of the grid?</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Key Idea</div>
+      <p>A tilted square is defined by a vector <code>(a, b)</code> with <em>a</em>, <em>b</em> ≥ 1. Its four vertices are obtained by rotating this vector 90° each time. The square fits inside a bounding box of size <code>(a+b) × (a+b)</code>.</p>
+      <div class="callout"><strong>Counting positions:</strong> In a grid of 5 columns × 4 rows, the number of positions a bounding box of side <em>s</em> can sit is <code>(5−s) × (4−s)</code>.</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">All valid (a, b) pairs with a, b ≥ 1</div>
+      <div class="math-block">(a,b)  →  s = a+b  →  positions = (5−s)×(4−s)
+
+(1,1)  →  s=2  →  3 × 2 = <span class="highlight">6</span>
+(1,2)  →  s=3  →  2 × 1 = <span class="highlight">2</span>
+(2,1)  →  s=3  →  2 × 1 = <span class="highlight">2</span>   <span class="comment">(different tilt from (1,2))</span>
+(1,3)  →  s=4  →  1 × 0 = <span class="highlight">0</span>
+(3,1)  →  s=4  →  1 × 0 = <span class="highlight">0</span>
+(2,2)  →  s=4  →  1 × 0 = <span class="highlight">0</span>
+
+<span class="comment">Note: 5×4 grid means s can be at most 3 for any positions to exist.</span>
+
+Total = 6 + 2 + 2 = <span class="highlight">10</span></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Visual — examples of each tilted type</div>
+      <div class="dot-grid-wrap">
+        <svg width="180" height="145" viewBox="0 0 180 145">
+          <!-- dots 5×4 -->
+          <g fill="#8b7355">
+            <script>
+              // drawn inline below
+            </script>
+          </g>
+          <!-- 5×4 grid of dots -->
+          <!-- col spacing 30, row spacing 30, start (15,15) -->
+          <!-- dots -->
+          <g fill="#8b7355">
+            <!-- row 0 -->
+            <circle cx="15" cy="15" r="3"/>  <circle cx="45" cy="15" r="3"/>  <circle cx="75" cy="15" r="3"/>  <circle cx="105" cy="15" r="3"/>  <circle cx="135" cy="15" r="3"/>
+            <!-- row 1 -->
+            <circle cx="15" cy="45" r="3"/>  <circle cx="45" cy="45" r="3"/>  <circle cx="75" cy="45" r="3"/>  <circle cx="105" cy="45" r="3"/>  <circle cx="135" cy="45" r="3"/>
+            <!-- row 2 -->
+            <circle cx="15" cy="75" r="3"/>  <circle cx="45" cy="75" r="3"/>  <circle cx="75" cy="75" r="3"/>  <circle cx="105" cy="75" r="3"/>  <circle cx="135" cy="75" r="3"/>
+            <!-- row 3 -->
+            <circle cx="15" cy="105" r="3"/>  <circle cx="45" cy="105" r="3"/>  <circle cx="75" cy="105" r="3"/>  <circle cx="105" cy="105" r="3"/>  <circle cx="135" cy="105" r="3"/>
+          </g>
+          <!-- (1,1) square in red: vector(1,1)→(30,30) -->
+          <!-- vertices: (15,45), (45,15), (75,45), (45,75) -->
+          <polygon points="15,45 45,15 75,45 45,75" fill="none" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="4,2"/>
+          <!-- (1,2) square: vector(1,2)→(30,60); vertices: (15,75),(45,15),(105,45),(75,105) -->
+          <polygon points="15,75 45,15 105,45 75,105" fill="none" stroke="#b8860b" stroke-width="1.8" stroke-dasharray="4,2"/>
+          <!-- (2,1) square: vector(2,1)→(60,30); vertices: (15,45),(75,15),(105,45+... -->
+          <!-- (2,1): from (15,45), next = (15+60,45-30)=(75,15), next=(75+30,15+60)=(105,75), next=(15+30,45+60)=(45,105) -->
+          <polygon points="15,45 75,15 105,75 45,105" fill="none" stroke="#1a6b6b" stroke-width="1.8" stroke-dasharray="4,2"/>
+          <!-- legend -->
+          <text x="15" y="130" font-family="monospace" font-size="9" fill="#c0392b">— (1,1)</text>
+          <text x="65" y="130" font-family="monospace" font-size="9" fill="#b8860b">— (1,2)</text>
+          <text x="115" y="130" font-family="monospace" font-size="9" fill="#1a6b6b">— (2,1)</text>
+        </svg>
+        <div style="flex:1; min-width:160px;">
+          <div class="math-block" style="font-size:0.82rem; line-height:1.9;">Each (a,b) pair defines a
+unique family of squares.
+
+(1,1): side = √2  → 6 squares
+(1,2): side = √5  → 2 squares
+(2,1): side = √5  → 2 squares
+
+<span class="highlight">Total = 10</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <span class="answer-label">Answer</span>
+      <span class="answer-value"><strong>10</strong> tilted squares</span>
+    </div>
+  </div>
+
+  <!-- ===== Q3 ===== -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">3</span>
+      <span class="problem-title">Standard Young Tableaux</span>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Problem</div>
+      <p>In each figure, numbers increase left-to-right in every row and top-to-bottom in every column. Count the number of valid fillings for each shape.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Key Idea — Hook Length Formula</div>
+      <p>The number of standard Young tableaux for a shape is given by:</p>
+      <div class="math-block">Number of ways  =  n! / (product of all hook lengths)
+
+Hook length of cell (i,j) = (cells to the right) + (cells below) + 1</div>
+      <div class="callout"><strong>Verification for Figure 1 (2×2):</strong> hooks are 3, 2, 2, 1 → product = 12. &nbsp; 4!/12 = 2. ✓</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Hook lengths worked out</div>
+      <div class="grid-demo">
+        <div class="grid-fig">
+          <div class="grid-fig-label">Figure 1 (2×2)</div>
+          <table class="ytable">
+            <tr><td>3</td><td>2</td></tr>
+            <tr><td>2</td><td>1</td></tr>
+          </table>
+        </div>
+        <div class="grid-fig">
+          <div class="grid-fig-label">Figure 2 (2×3)</div>
+          <table class="ytable">
+            <tr><td>4</td><td>3</td><td>2</td></tr>
+            <tr><td>3</td><td>2</td><td>1</td></tr>
+          </table>
+        </div>
+        <div class="grid-fig">
+          <div class="grid-fig-label">Figure 3 (3×3)</div>
+          <table class="ytable">
+            <tr><td>5</td><td>4</td><td>3</td></tr>
+            <tr><td>4</td><td>3</td><td>2</td></tr>
+            <tr><td>3</td><td>2</td><td>1</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="math-block">Fig 1: 4! / (3×2×2×1) = 24 / 12 = <span class="highlight">2</span>
+
+Fig 2: 6! / (4×3×2 × 3×2×1) = 720 / 144 = <span class="highlight">5</span>
+
+Fig 3: 9! / (5×4×3 × 4×3×2 × 3×2×1)
+     = 362880 / 8640 = <span class="highlight">42</span></div>
+    </div>
+
+    <div class="sub-parts">
+      <div class="sub-part">
+        <div class="sub-part-label">Part (a) — 2×2</div>
+        <div class="sub-part-val">2</div>
+        <div class="sub-part-desc">ways to fill 1–4</div>
+      </div>
+      <div class="sub-part">
+        <div class="sub-part-label">Part (b) — 2×3</div>
+        <div class="sub-part-val">5</div>
+        <div class="sub-part-desc">ways to fill 1–6</div>
+      </div>
+      <div class="sub-part">
+        <div class="sub-part-label">Part (c) — 3×3</div>
+        <div class="sub-part-val">42</div>
+        <div class="sub-part-desc">ways to fill 1–9</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Q4 ===== -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">4</span>
+      <span class="problem-title">Finding the Missing Digits of 26!</span>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Problem</div>
+      <p>Given that <code>26! = 4032914<em>A</em>112660<em>B</em>63558<em>C</em><em>D</em>00000</code>, find the values of A, B, C, and D.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Direct Computation</div>
+      <p>Computing 26! directly (it has exactly 27 digits):</p>
+      <div class="math-block">26! = 403,291,461,126,605,635,584,000,000
+
+Written out: 4 0 3 2 9 1 4 <span class="highlight">6</span> 1 1 2 6 6 0 <span class="highlight">5</span> 6 3 5 5 8 <span class="highlight">4</span> <span class="highlight">0</span> 0 0 0 0 0</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Digit comparison</div>
+      <div class="digit-table">
+        <div class="digit-cell">4</div><div class="digit-cell">0</div><div class="digit-cell">3</div><div class="digit-cell">2</div><div class="digit-cell">9</div><div class="digit-cell">1</div><div class="digit-cell">4</div><div class="digit-cell found" title="A=6">6</div><div class="digit-cell">1</div><div class="digit-cell">1</div><div class="digit-cell">2</div><div class="digit-cell">6</div><div class="digit-cell">6</div><div class="digit-cell">0</div><div class="digit-cell found" title="B=5">5</div><div class="digit-cell">6</div><div class="digit-cell">3</div><div class="digit-cell">5</div><div class="digit-cell">5</div><div class="digit-cell">8</div><div class="digit-cell found" title="C=4">4</div><div class="digit-cell found" title="D=0">0</div><div class="digit-cell">0</div><div class="digit-cell">0</div><div class="digit-cell">0</div><div class="digit-cell">0</div><div class="digit-cell">0</div>
+      </div>
+      <p style="font-size:0.82rem; color:var(--muted); margin-top:8px; font-family:'DM Mono',monospace;">Highlighted cells = the unknown digits A, B, C, D</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Verification via divisibility</div>
+      <div class="math-block"><span class="comment">Trailing zeros: 26! ends in 6 zeros
+(count factors of 5: ⌊26/5⌋+⌊26/25⌋ = 5+1 = 6) ✓</span>
+
+<span class="comment">Digit sum check for divisibility by 9:
+4+0+3+2+9+1+4+6+1+1+2+6+6+0+5+6+3+5+5+8+4+0 = 81 = 9×9 ✓</span></div>
+    </div>
+
+    <div class="answer-box">
+      <span class="answer-label">Answer</span>
+      <span class="answer-value">A = 6,&nbsp; B = 5,&nbsp; C = 4,&nbsp; D = 0</span>
+    </div>
+  </div>
+
+  <!-- ===== Q5 ===== -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">5</span>
+      <span class="problem-title">Minimum Area of Triangle DEF</span>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Problem</div>
+      <p>Rectangle ABCD with AB = 40, BC = 50. Point E on AB, point F on BC, with BE + BF = 30. Find the minimum area of triangle DEF.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Setup — Coordinate System</div>
+      <div class="geo-wrap">
+        <svg width="220" height="165" viewBox="0 0 220 165">
+          <!-- Rectangle: B(10,130), A(10,10), D(170,10), C(170,130) -->
+          <rect x="10" y="10" width="160" height="120" fill="#f5f0e8" stroke="#b8860b" stroke-width="1.8"/>
+          <!-- Labels -->
+          <text x="2" y="9" font-family="'Lora',serif" font-size="13" fill="#1a1208" font-style="italic">A</text>
+          <text x="173" y="9" font-family="'Lora',serif" font-size="13" fill="#1a1208" font-style="italic">D</text>
+          <text x="2" y="138" font-family="'Lora',serif" font-size="13" fill="#1a1208" font-style="italic">B</text>
+          <text x="173" y="138" font-family="'Lora',serif" font-size="13" fill="#1a1208" font-style="italic">C</text>
+          <!-- E on AB, F on BC — let BE=10, BF=20 as example -->
+          <!-- E is 10 up from B (10,130) → (10,120) -->
+          <!-- F is 20 right from B (10,130) → (30,130) -->
+          <circle cx="10" cy="90" r="4" fill="#c0392b"/>
+          <circle cx="70" cy="130" r="4" fill="#c0392b"/>
+          <circle cx="170" cy="10" r="4" fill="#c0392b"/>
+          <!-- Triangle DEF -->
+          <polygon points="10,90 70,130 170,10" fill="rgba(192,57,43,0.12)" stroke="#c0392b" stroke-width="2"/>
+          <!-- Dimension labels -->
+          <text x="14" y="92" font-family="'Lora',serif" font-size="12" fill="#c0392b" font-style="italic">E</text>
+          <text x="72" y="143" font-family="'Lora',serif" font-size="12" fill="#c0392b" font-style="italic">F</text>
+          <!-- BE arrow -->
+          <text x="185" y="73" font-family="'DM Mono',monospace" font-size="9" fill="#8b7355">AB=40</text>
+          <text x="70" y="8" font-family="'DM Mono',monospace" font-size="9" fill="#8b7355">BC=50</text>
+          <text x="14" y="120" font-family="'DM Mono',monospace" font-size="9" fill="#c0392b">e</text>
+          <text x="30" y="145" font-family="'DM Mono',monospace" font-size="9" fill="#c0392b">f</text>
+        </svg>
+        <div style="flex:1; min-width:180px;">
+          <div class="math-block" style="font-size:0.83rem; line-height:1.85;">Place B = (0, 0)
+A = (0, 40), C = (50, 0), D = (50, 40)
+
+E on AB: E = (0, e),  BE = e
+F on BC: F = (f, 0),  BF = f
+Constraint: e + f = 30,  0 ≤ e ≤ 30</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Area Formula</div>
+      <div class="math-block">Area(DEF) with D=(50,40), E=(0,e), F=(f,0):
+
+= ½ |x_D(y_E − y_F) + x_E(y_F − y_D) + x_F(y_D − y_E)|
+= ½ |50e + 0·(−40) + f(40 − e)|
+= ½ |50e + 40f − ef|
+
+Substitute f = 30 − e:
+
+= ½ |50e + 40(30−e) − e(30−e)|
+= ½ |50e + 1200 − 40e − 30e + e²|
+= ½ (e² − 20e + 1200)</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Minimisation</div>
+      <div class="math-block">Minimise  g(e) = e² − 20e + 1200
+
+g'(e) = 2e − 20 = 0  →  <span class="highlight">e = 10</span>
+
+(discriminant of e²−20e+1200 is 400−4800 &lt; 0,
+so g(e) &gt; 0 always — no sign issue)
+
+g(10) = 100 − 200 + 1200 = 1100
+
+Min Area = 1100 / 2 = <span class="highlight">550</span></div>
+      <div class="callout"><strong>Optimal position:</strong> BE = 10, BF = 20. The triangle DEF then has minimum area 550 square units.</div>
+    </div>
+
+    <div class="answer-box">
+      <span class="answer-label">Minimum Area</span>
+      <span class="answer-value"><strong>550</strong> square units</span>
+    </div>
+  </div>
+
+  <footer class="footer">
+    SMOPS 2014 Round 2 &nbsp;·&nbsp; Problems 1–5 &nbsp;·&nbsp; Fully Worked Solutions
+  </footer>
+
+</div>
+</body>
+</html>

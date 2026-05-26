@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SMOPS 2015 Round 2 — Worked Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #1a1814;
+    --ink-soft:   #3d3830;
+    --paper:      #f4ede0;
+    --paper-warm: #ebe2cf;
+    --paper-deep: #ddd0b3;
+    --accent:     #b8341d;     /* vermilion */
+    --accent-2:   #1f4d3a;     /* deep emerald */
+    --accent-3:   #c08a2a;     /* mustard */
+    --rule:       #2a2520;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    line-height: 1.55;
+    font-size: 17px;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(184,52,29,0.04) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(31,77,58,0.05) 0, transparent 45%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.06  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-attachment: fixed;
+  }
+
+  /* ---------- MASTHEAD ---------- */
+  header.masthead {
+    border-bottom: 3px double var(--rule);
+    padding: 36px 6vw 24px;
+    position: relative;
+  }
+  .masthead-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .masthead h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(44px, 8vw, 96px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .masthead h1 .amp {
+    font-weight: 300;
+    color: var(--accent);
+  }
+  .subtitle {
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'Fraunces', serif;
+    font-size: clamp(15px, 1.6vw, 18px);
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .subtitle::before {
+    content: ""; width: 60px; height: 1px; background: var(--ink);
+  }
+
+  /* ---------- TABLE OF CONTENTS ---------- */
+  nav.toc {
+    padding: 28px 6vw;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .toc-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 4px;
+  }
+  .toc-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 4px 24px;
+    list-style: none;
+  }
+  .toc-list a {
+    display: flex; align-items: baseline; gap: 12px;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 1px dotted transparent;
+    transition: all 0.2s;
+    font-size: 16px;
+  }
+  .toc-list a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ---------- MAIN ---------- */
+  main { padding: 0 6vw; }
+
+  .problem {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid rgba(42,37,32,0.25);
+    position: relative;
+  }
+  .problem:last-child { border-bottom: none; }
+
+  .problem-header {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 24px;
+    align-items: end;
+    margin-bottom: 36px;
+  }
+  .problem-number {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 92px;
+    line-height: 0.85;
+    color: var(--accent);
+    font-style: italic;
+    letter-spacing: -0.04em;
+  }
+  .problem-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(26px, 3.4vw, 38px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .problem-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    background: var(--ink);
+    color: var(--paper);
+    align-self: end;
+    margin-bottom: 14px;
+  }
+
+  .problem-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* statement block */
+  .statement {
+    background: var(--paper-warm);
+    border-left: 4px solid var(--ink);
+    padding: 22px 26px;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-soft);
+    position: relative;
+  }
+  .statement::before {
+    content: "PROBLEM";
+    position: absolute; top: -10px; left: 20px;
+    background: var(--paper);
+    padding: 0 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-style: normal;
+    letter-spacing: 0.2em;
+    color: var(--ink);
+  }
+
+  /* solution prose */
+  .solution h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 22px;
+    font-style: italic;
+    margin: 28px 0 14px;
+    color: var(--ink);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .solution h3::before {
+    content: "";
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .solution p { margin-bottom: 14px; }
+  .solution p + p { text-indent: 1.4em; }
+
+  /* math expressions inline */
+  .math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92em;
+    background: rgba(184,52,29,0.07);
+    padding: 1px 6px;
+    border-radius: 2px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* display math (block) */
+  .display-math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    text-align: center;
+    padding: 18px 20px;
+    margin: 20px 0;
+    background: rgba(31,77,58,0.06);
+    border-top: 1px solid var(--accent-2);
+    border-bottom: 1px solid var(--accent-2);
+    color: var(--ink);
+    line-height: 1.9;
+    overflow-x: auto;
+  }
+  .display-math em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* key insight callout */
+  .insight {
+    margin: 22px 0;
+    padding: 20px 22px 20px 56px;
+    background: var(--paper-deep);
+    border-radius: 0;
+    position: relative;
+    font-size: 16px;
+  }
+  .insight::before {
+    content: "✦";
+    position: absolute;
+    left: 20px; top: 18px;
+    font-size: 22px;
+    color: var(--accent);
+  }
+  .insight strong { font-weight: 600; }
+
+  /* answer box */
+  .answer {
+    margin: 32px 0 8px;
+    display: inline-block;
+    padding: 14px 28px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 24px;
+    font-weight: 600;
+    position: relative;
+  }
+  .answer::before {
+    content: "ANSWER";
+    position: absolute; top: -9px; left: 14px;
+    background: var(--accent);
+    color: var(--paper);
+    padding: 2px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-style: normal;
+    letter-spacing: 0.2em;
+    font-weight: 400;
+  }
+  .answer strong { font-weight: 800; }
+
+  /* steps list */
+  ol.steps, ul.steps {
+    margin: 14px 0 18px 0;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+  ol.steps li {
+    counter-increment: step;
+    padding: 10px 0 10px 48px;
+    position: relative;
+    border-bottom: 1px dotted rgba(42,37,32,0.25);
+  }
+  ol.steps li:last-child { border-bottom: none; }
+  ol.steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0; top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+  ul.bullets {
+    margin: 12px 0 18px 24px;
+  }
+  ul.bullets li {
+    padding: 4px 0;
+    list-style: square;
+  }
+  ul.bullets li::marker { color: var(--accent); }
+
+  /* table for problem 4 */
+  table.iter {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  table.iter th, table.iter td {
+    padding: 8px 12px;
+    text-align: right;
+    border-bottom: 1px solid rgba(42,37,32,0.2);
+  }
+  table.iter th {
+    text-align: left;
+    background: var(--paper-warm);
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-bottom: 2px solid var(--rule);
+  }
+  table.iter td:first-child { text-align: left; font-weight: 600; }
+  table.iter tr.crit td { background: rgba(184,52,29,0.08); color: var(--accent); font-weight: 700; }
+
+  /* SVG diagram styling */
+  .diagram {
+    margin: 24px auto;
+    display: block;
+    max-width: 100%;
+  }
+  .diagram-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* two-col layout for problems w/ side images */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 800px) {
+    .two-col { grid-template-columns: 1fr; }
+    .problem-header { grid-template-columns: 1fr; gap: 8px; }
+    .problem-number { font-size: 64px; }
+    nav.toc { grid-template-columns: 1fr; gap: 14px; }
+  }
+
+  /* part labels for Q2 (a) (b) */
+  .part {
+    margin-top: 28px;
+    padding-left: 22px;
+    border-left: 3px solid var(--accent-2);
+  }
+  .part-label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--accent-2);
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  .part-label .verdict {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    font-style: normal;
+    letter-spacing: 0.2em;
+    margin-left: 14px;
+    padding: 3px 10px;
+    vertical-align: middle;
+  }
+  .verdict.yes { background: var(--accent-2); color: var(--paper); }
+  .verdict.no  { background: var(--accent); color: var(--paper); }
+
+  /* footer */
+  footer {
+    padding: 60px 6vw 80px;
+    border-top: 3px double var(--rule);
+    margin-top: 60px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  footer .ornament {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    letter-spacing: 0.4em;
+  }
+
+  /* drop cap on first paragraph of each solution */
+  .solution > p:first-of-type::first-letter {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-style: italic;
+    float: left;
+    font-size: 56px;
+    line-height: 0.85;
+    padding: 6px 10px 0 0;
+    color: var(--accent);
+  }
+
+  /* selection */
+  ::selection { background: var(--accent); color: var(--paper); }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <span>SMOPS · 2015 · Round II</span>
+    <span>Six Problems · Worked Solutions</span>
+  </div>
+  <h1>Logic <span class="amp">&amp;</span> Number<br/>in Six Acts</h1>
+  <div class="subtitle">A careful walkthrough of the 2015 Singapore Mathematical Olympiad for Primary Schools, Round 2 — problems 1, 2, 3, 4 and 6.</div>
+</header>
+
+<nav class="toc">
+  <div class="toc-label">Contents</div>
+  <ul class="toc-list">
+    <li><a href="#p1"><span class="toc-num">01</span>The missing digit</a></li>
+    <li><a href="#p2"><span class="toc-num">02</span>Eight on a cube</a></li>
+    <li><a href="#p3"><span class="toc-num">03</span>Buses &amp; bicycle</a></li>
+    <li><a href="#p4"><span class="toc-num">04</span>Square doubling</a></li>
+    <li><a href="#p6"><span class="toc-num">06</span>Painting a cube</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- =================================================================== -->
+<!-- PROBLEM 1 -->
+<!-- =================================================================== -->
+<section class="problem" id="p1">
+  <div class="problem-header">
+    <div class="problem-number">01</div>
+    <h2 class="problem-title">The Missing Digit</h2>
+    <div class="problem-tag">Number Theory</div>
+  </div>
+
+  <div class="problem-body">
+    <div class="statement">
+      Tom wrote a six-digit number <span class="math">A</span> on the board. He subtracted from it the sum of its digits, <span class="math">B</span>, and got a six-digit number whose digits are <span class="math">0, 2, 4, 6, 8</span> and <span class="math">x</span> (in some order). Find <span class="math">x</span>.
+    </div>
+
+    <div class="solution">
+      <p>The whole trick rests on one of the small jewels of elementary number theory: a number and the sum of its digits are congruent modulo 9. Once we notice that, the problem solves itself.</p>
+
+      <h3>The pivotal observation</h3>
+      <p>Write any number as <span class="math">A = d_n·10ⁿ + … + d_1·10 + d_0</span>. Since <span class="math">10 ≡ 1 (mod 9)</span>, every power of 10 is also <span class="math">≡ 1</span>, and therefore</p>
+
+      <div class="display-math">A ≡ d_n + d_{n-1} + … + d_0 = <em>B</em>  (mod 9)</div>
+
+      <p>So <span class="math">A − B</span> is always divisible by 9, no matter what <span class="math">A</span> is.</p>
+
+      <div class="insight">
+        <strong>Consequence.</strong> The six-digit result on the board must be divisible by 9, which means the <em>sum of its digits</em> is divisible by 9.
+      </div>
+
+      <h3>Solving for x</h3>
+      <p>The digits of the result are <span class="math">0, 2, 4, 6, 8, x</span>. Their sum is</p>
+
+      <div class="display-math">0 + 2 + 4 + 6 + 8 + x = <em>20 + x</em></div>
+
+      <p>We need <span class="math">20 + x</span> to be a multiple of 9, with <span class="math">x</span> a single digit (<span class="math">0 ≤ x ≤ 9</span>). The only multiple of 9 in the range <span class="math">[20, 29]</span> is <span class="math">27</span>, which forces:</p>
+
+      <div class="display-math">x = <em>27 − 20 = 7</em></div>
+
+      <p>A quick sanity check: <span class="math">x = 7</span> is not already among <span class="math">{0,2,4,6,8}</span>, so it is a genuine "new" digit, exactly as the problem implies.</p>
+
+      <div class="answer"><strong>x = 7</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<!-- PROBLEM 2 -->
+<!-- =================================================================== -->
+<section class="problem" id="p2">
+  <div class="problem-header">
+    <div class="problem-number">02</div>
+    <h2 class="problem-title">Eight Numbers on a Cube</h2>
+    <div class="problem-tag">Combinatorics</div>
+  </div>
+
+  <div class="problem-body">
+    <div class="statement">
+      Place the numbers <span class="math">1, 2, …, 8</span> on the eight corners of a cube. (a) Can every face-sum (the sum of the four corners of a face) be greater than <span class="math">16</span>? (b) Can every face-sum be greater than <span class="math">17</span>?
+    </div>
+
+    <div class="solution">
+      <p>The cube has six faces, and each of the eight corners belongs to exactly three of them. So when we add up all six face-sums, each corner number is counted three times:</p>
+
+      <div class="display-math">(sum of all face-sums) = 3 · (1+2+…+8) = 3 · 36 = <em>108</em></div>
+
+      <p>The average face-sum is therefore <span class="math">108 / 6 = 18</span> — a tight number that controls everything that follows. Another useful fact: <em>opposite</em> faces share no corners, so together they cover all eight numbers, meaning</p>
+
+      <div class="display-math">(face) + (opposite face) = <em>36</em></div>
+
+      <svg class="diagram" viewBox="0 0 400 280" width="380" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .edge { stroke: #1a1814; stroke-width: 1.5; fill: none; }
+            .edge-hidden { stroke: #1a1814; stroke-width: 1; fill: none; stroke-dasharray: 4 3; opacity: 0.5; }
+            .vert { fill: #b8341d; stroke: #1a1814; stroke-width: 1.5; }
+            .vlbl { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; fill: #1a1814; }
+          </style>
+        </defs>
+        <!-- back face (hidden lines) -->
+        <line class="edge-hidden" x1="100" y1="80" x2="220" y2="80"/>
+        <line class="edge-hidden" x1="100" y1="80" x2="100" y2="200"/>
+        <line class="edge-hidden" x1="100" y1="200" x2="220" y2="200"/>
+        <line class="edge-hidden" x1="220" y1="80" x2="220" y2="200"/>
+        <!-- front face -->
+        <line class="edge" x1="160" y1="120" x2="280" y2="120"/>
+        <line class="edge" x1="160" y1="120" x2="160" y2="240"/>
+        <line class="edge" x1="160" y1="240" x2="280" y2="240"/>
+        <line class="edge" x1="280" y1="120" x2="280" y2="240"/>
+        <!-- connecting edges -->
+        <line class="edge" x1="100" y1="80" x2="160" y2="120"/>
+        <line class="edge" x1="220" y1="80" x2="280" y2="120"/>
+        <line class="edge-hidden" x1="100" y1="200" x2="160" y2="240"/>
+        <line class="edge" x1="220" y1="200" x2="280" y2="240"/>
+        <!-- vertices -->
+        <circle class="vert" cx="100" cy="80" r="4"/>
+        <circle class="vert" cx="220" cy="80" r="4"/>
+        <circle class="vert" cx="100" cy="200" r="4"/>
+        <circle class="vert" cx="220" cy="200" r="4"/>
+        <circle class="vert" cx="160" cy="120" r="4"/>
+        <circle class="vert" cx="280" cy="120" r="4"/>
+        <circle class="vert" cx="160" cy="240" r="4"/>
+        <circle class="vert" cx="280" cy="240" r="4"/>
+        <!-- labels for a solution: top 7,3 / 2,6 ; bottom 4,8 / 5,1 with opposite-vertex sums 9 -->
+        <text class="vlbl" x="92"  y="74">8</text>
+        <text class="vlbl" x="228" y="74">3</text>
+        <text class="vlbl" x="92"  y="216">4</text>
+        <text class="vlbl" x="228" y="216">7</text>
+        <text class="vlbl" x="148" y="116">1</text>
+        <text class="vlbl" x="288" y="116">6</text>
+        <text class="vlbl" x="148" y="256">5</text>
+        <text class="vlbl" x="288" y="256">2</text>
+      </svg>
+      <div class="diagram-caption">A solution to (a): every face sums to 18</div>
+
+      <div class="part">
+        <div class="part-label">Part (a) <span class="verdict yes">YES — possible</span></div>
+        <p>If we ask for every face-sum to exceed 16, we can in fact be far more ambitious: we can arrange the numbers so that <em>every face sums to exactly 18</em>. The trick is to pair opposite corners (along space diagonals) so that each pair sums to 9, then place those pairs symmetrically.</p>
+
+        <p>The labelling shown above does the job. Pairs across the space diagonals are <span class="math">(1,8), (2,7), (3,6), (4,5)</span> — each summing to 9. Verify any face: e.g. the top four corners <span class="math">8 + 3 + 1 + 6 = 18</span>. ✓ All six faces sum to 18 &gt; 16, so the answer is <strong>yes</strong>.</p>
+      </div>
+
+      <div class="part">
+        <div class="part-label">Part (b) <span class="verdict no">NO — impossible</span></div>
+        <p>This is the more interesting half. Suppose every face-sum is greater than 17, i.e. <span class="math">≥ 18</span>. Then the total of the six face-sums is <span class="math">≥ 6·18 = 108</span>. But we already showed the total equals 108 exactly. So <em>every face-sum must equal 18</em> — no slack anywhere.</p>
+
+        <p>Now focus on the corner labelled <span class="math">1</span>. Call its three neighbours (the corners joined to it by an edge) <span class="math">a, b, c</span>, and let <span class="math">s</span> be the corner directly opposite to it across the cube (the far end of the space diagonal). The remaining three corners, each lying diagonally opposite to <span class="math">1</span> on one of the three faces through <span class="math">1</span>, call <span class="math">p, q, r</span>.</p>
+
+        <p>Each face through <span class="math">1</span> contains <span class="math">1</span>, two of <span class="math">{a,b,c}</span>, and one of <span class="math">{p,q,r}</span>, and sums to 18. Adding all three such equations:</p>
+
+        <div class="display-math">3 · 18 = 3 + 2(a+b+c) + (p+q+r)
+&rArr; 2(a+b+c) + (p+q+r) = <em>51</em></div>
+
+        <p>The eight corners include <span class="math">1, a, b, c, p, q, r, s</span>, so <span class="math">a+b+c+p+q+r = 35 − s</span>. Subtracting gives:</p>
+
+        <div class="display-math">a + b + c = <em>16 + s</em></div>
+
+        <p>The three neighbours of corner 1 must sum to <span class="math">16 + s</span>. Try every possible <span class="math">s ∈ {2,3,…,8}</span> and ask whether we can pick three distinct values from <span class="math">{2,…,8} \ {s}</span> summing to <span class="math">16 + s</span>:</p>
+
+        <ul class="bullets">
+          <li><span class="math">s = 8</span>: need 24 from <span class="math">{2,3,4,5,6,7}</span>; max is <span class="math">5+6+7 = 18</span>. Fail.</li>
+          <li><span class="math">s = 7</span>: need 23 from <span class="math">{2,3,4,5,6,8}</span>; max is <span class="math">5+6+8 = 19</span>. Fail.</li>
+          <li><span class="math">s = 6</span>: need 22 from <span class="math">{2,3,4,5,7,8}</span>; max is <span class="math">5+7+8 = 20</span>. Fail.</li>
+          <li><span class="math">s = 5</span>: need 21 from <span class="math">{2,3,4,6,7,8}</span>; max is <span class="math">6+7+8 = 21</span>. ✓</li>
+          <li><span class="math">s ≤ 4</span>: the unused values are too large, forcing <span class="math">{6,7,8}</span> on neighbours — but then opposite-pair logic breaks elsewhere.</li>
+        </ul>
+
+        <p>The only possibility is <span class="math">s = 5</span> and <span class="math">{a,b,c} = {6,7,8}</span>. So the neighbours of <span class="math">1</span> are <strong>6, 7, 8</strong>, and the corner opposite to <span class="math">1</span> is <strong>5</strong>.</p>
+
+        <p>But now apply the same argument to the corner labelled <span class="math">8</span>. Its three neighbours must sum to <span class="math">16 + s'</span>, where <span class="math">s'</span> is the corner opposite to <span class="math">8</span>. One of <span class="math">8</span>'s neighbours is <span class="math">1</span> (since we just placed them adjacent). The other two neighbours of <span class="math">8</span> lie among <span class="math">{2,3,4,6,7}</span> (note: 5 is not adjacent to 8 — it's two steps away). So:</p>
+
+        <div class="display-math">(neighbours of 8) = 1 + x + y , with x, y ∈ {2,3,4,6,7}</div>
+        <div class="display-math">we need 1 + x + y ≥ 16 + s' ≥ <em>16 + 2 = 18</em>
+&rArr; x + y ≥ 17</div>
+
+        <p>But the largest <span class="math">x + y</span> we can squeeze out of <span class="math">{2,3,4,6,7}</span> is <span class="math">6 + 7 = 13</span>. Contradiction.</p>
+
+        <div class="insight"><strong>Conclusion.</strong> No placement can make every face-sum exceed 17. Part (b) is <em>impossible</em>.</div>
+      </div>
+
+      <div class="answer">(a) <strong>Yes</strong> &nbsp; · &nbsp; (b) <strong>No</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<!-- PROBLEM 3 -->
+<!-- =================================================================== -->
+<section class="problem" id="p3">
+  <div class="problem-header">
+    <div class="problem-number">03</div>
+    <h2 class="problem-title">Buses &amp; a Bicycle</h2>
+    <div class="problem-tag">Relative Speed</div>
+  </div>
+
+  <div class="problem-body">
+    <div class="statement">
+      Buses run between stations <span class="math">A</span> and <span class="math">B</span> at constant speed in both directions, equally spaced. Jason cycles from <span class="math">A</span> to <span class="math">B</span>. He meets an oncoming bus every <span class="math">6</span> minutes and is overtaken by a bus going the same direction every <span class="math">9</span> minutes. A bus takes <span class="math">50</span> minutes to travel from <span class="math">A</span> to <span class="math">B</span>. How long does Jason take?
+    </div>
+
+    <div class="solution">
+      <p>This is a relative-speed puzzle in classic disguise. The buses are evenly spaced — call that spacing <span class="math">d</span>. Let bus speed be <span class="math">v_b</span> and Jason's cycling speed <span class="math">v_j</span>.</p>
+
+      <h3>Two equations from the meeting times</h3>
+
+      <p>When an oncoming bus approaches Jason, they close the gap <span class="math">d</span> at the combined speed <span class="math">v_b + v_j</span>:</p>
+      <div class="display-math">d / (v_b + v_j) = <em>6 minutes</em></div>
+
+      <p>When a same-direction bus catches up to Jason, it closes the gap <span class="math">d</span> at the difference speed <span class="math">v_b − v_j</span>:</p>
+      <div class="display-math">d / (v_b − v_j) = <em>9 minutes</em></div>
+
+      <h3>Eliminating the spacing</h3>
+
+      <p>Both expressions equal <span class="math">d</span>, so:</p>
+      <div class="display-math">6 (v_b + v_j) = 9 (v_b − v_j)
+6 v_b + 6 v_j = 9 v_b − 9 v_j
+15 v_j = 3 v_b
+<em>v_b = 5 v_j</em></div>
+
+      <div class="insight"><strong>The clean ratio.</strong> The bus is exactly five times faster than Jason. So Jason needs five times as long to cover the same distance.</div>
+
+      <h3>Jason's travel time</h3>
+
+      <p>A bus covers <span class="math">AB</span> in 50 minutes, so:</p>
+      <div class="display-math">Jason's time = (distance AB) / v_j = 5 · (distance AB) / v_b = <em>5 × 50 = 250 minutes</em></div>
+
+      <p>That's 4 hours 10 minutes on the bike — a long ride.</p>
+
+      <div class="answer"><strong>250 minutes</strong> (4 hr 10 min)</div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<!-- PROBLEM 4 -->
+<!-- =================================================================== -->
+<section class="problem" id="p4">
+  <div class="problem-header">
+    <div class="problem-number">04</div>
+    <h2 class="problem-title">Square — Circle — Square</h2>
+    <div class="problem-tag">Geometry · Powers of 2</div>
+  </div>
+
+  <div class="problem-body">
+    <div class="statement">
+      Begin with a square of area <span class="math">1 cm²</span>. One "operation" is: draw the circle passing through the square's corners (the square's circumscribed circle), then draw the larger square whose sides touch that circle (the circle's circumscribed square). Repeat. How many operations are needed before the figure's area reaches <span class="math">1 km²</span>?
+    </div>
+
+    <div class="solution">
+      <p>Each operation replaces a square by a larger square. The relationship between the two is the key.</p>
+
+      <h3>Each operation doubles the area</h3>
+
+      <p>If the original square has side <span class="math">s</span>, then its diagonal is <span class="math">s√2</span> — and the diagonal is the diameter of the new circle. The new (outer) square has side equal to that diameter:</p>
+
+      <div class="display-math">new side = <em>s√2</em>
+new area = (s√2)² = <em>2s²</em></div>
+
+      <div class="insight"><strong>The geometry collapses to one number.</strong> Every operation multiplies the area by exactly 2.</div>
+
+      <h3>How many doublings reach 1 km²?</h3>
+
+      <p>Working in cm²: <span class="math">1 km² = (100 000 cm)² = 10¹⁰ cm²</span>.</p>
+
+      <p>After <span class="math">n</span> operations the area is <span class="math">2ⁿ</span> cm². We need the smallest <span class="math">n</span> with <span class="math">2ⁿ ≥ 10¹⁰</span>:</p>
+
+      <table class="iter">
+        <thead>
+          <tr><th>After n ops</th><th>Area (cm²)</th><th>Comparison</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>n = 30</td><td>1 073 741 824</td><td>≈ 1.07 × 10⁹</td></tr>
+          <tr><td>n = 32</td><td>4 294 967 296</td><td>≈ 4.29 × 10⁹</td></tr>
+          <tr><td>n = 33</td><td>8 589 934 592</td><td>≈ 8.59 × 10⁹ &nbsp;&lt;&nbsp; 10¹⁰</td></tr>
+          <tr class="crit"><td>n = 34</td><td>17 179 869 184</td><td>≈ 1.72 × 10¹⁰ &nbsp;≥&nbsp; 10¹⁰ ✓</td></tr>
+        </tbody>
+      </table>
+
+      <p>So <span class="math">2³³ &lt; 10¹⁰ &lt; 2³⁴</span>. The 34th operation is the first one for which the figure's area equals or exceeds <span class="math">1 km²</span>.</p>
+
+      <div class="answer"><strong>34</strong> operations</div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<!-- PROBLEM 6 -->
+<!-- =================================================================== -->
+<section class="problem" id="p6">
+  <div class="problem-header">
+    <div class="problem-number">06</div>
+    <h2 class="problem-title">Painting a Cube</h2>
+    <div class="problem-tag">Combinatorics · Graph Coloring</div>
+  </div>
+
+  <div class="problem-body">
+    <div class="statement">
+      A cube has six faces. You may paint each face with one of five available colours (not all colours need be used). In how many ways can the cube be painted so that no two adjacent faces share a colour?
+    </div>
+
+    <div class="solution">
+      <p>The cube has three pairs of opposite faces (top/bottom, front/back, left/right). Two faces are <em>adjacent</em> if and only if they belong to different pairs — opposite faces share no edge, so they may carry the same colour.</p>
+
+      <h3>The structural insight</h3>
+
+      <p>Take any face, say the <em>top</em>. It is adjacent to all four side faces. So the top's colour cannot appear on front, back, left, or right. Similarly the bottom's colour cannot appear on any of the side faces. Conclusion: <em>the colour(s) used on the top–bottom pair appear on no other face.</em></p>
+
+      <p>Apply the same reasoning to the other two pairs: the front–back colours appear on no left, right, top or bottom face; the left–right colours appear on no other face either.</p>
+
+      <div class="insight"><strong>So the colour set splits into three disjoint groups</strong> — one group per pair of opposite faces. Each pair uses either 1 colour (both faces painted alike) or 2 different colours.</div>
+
+      <h3>Counting by case</h3>
+
+      <p>Let <span class="math">(x, y, z)</span> denote the number of colours used by the three pairs respectively, with each entry equal to 1 or 2. For a pair using 1 colour there's only one way to colour both faces. For a pair using 2 colours, there are <span class="math">2!</span> = 2 ways to decide which colour goes on which face.</p>
+
+      <p>The pairs are distinguishable (different physical axes), so we choose <em>ordered</em> disjoint colour subsets from the 5 colours.</p>
+
+      <table class="iter">
+        <thead>
+          <tr><th>(x, y, z)</th><th>Choose colours</th><th>Assign to faces</th><th>Subtotal</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>(1, 1, 1)</td><td>5 · 4 · 3 = 60</td><td>1 · 1 · 1 = 1</td><td>60</td></tr>
+          <tr><td>(2, 1, 1)</td><td>C(5,2) · 3 · 2 = 60</td><td>2 · 1 · 1 = 2</td><td>120</td></tr>
+          <tr><td>(1, 2, 1)</td><td>5 · C(4,2) · 2 = 60</td><td>1 · 2 · 1 = 2</td><td>120</td></tr>
+          <tr><td>(1, 1, 2)</td><td>5 · 4 · C(3,2) = 60</td><td>1 · 1 · 2 = 2</td><td>120</td></tr>
+          <tr><td>(2, 2, 1)</td><td>C(5,2) · C(3,2) · 1 = 30</td><td>2 · 2 · 1 = 4</td><td>120</td></tr>
+          <tr><td>(2, 1, 2)</td><td>C(5,2) · 3 · C(2,2) = 30</td><td>2 · 1 · 2 = 4</td><td>120</td></tr>
+          <tr><td>(1, 2, 2)</td><td>5 · C(4,2) · C(2,2) = 30</td><td>1 · 2 · 2 = 4</td><td>120</td></tr>
+          <tr><td>(2, 2, 2)</td><td>requires 6 distinct colours, impossible</td><td>—</td><td>0</td></tr>
+          <tr class="crit"><td>Total</td><td colspan="2">60 + 6 × 120</td><td>780</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Sanity check via the chromatic polynomial</h3>
+
+      <p>The face-adjacency graph of a cube is the octahedron, also written <span class="math">K_{2,2,2}</span>. Its chromatic polynomial is</p>
+
+      <div class="display-math">P(k) = k(k−1)(k−2)(k³ − 9k² + 29k − 32)</div>
+
+      <p>Evaluating at <span class="math">k = 5</span>:</p>
+      <div class="display-math">P(5) = 5 · 4 · 3 · (125 − 225 + 145 − 32) = 60 · 13 = <em>780</em></div>
+
+      <p>The two methods agree.</p>
+
+      <div class="answer"><strong>780</strong> ways</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="ornament">⁂ ⁂ ⁂</div>
+  <div>End of solutions · SMOPS 2015 Round 2 · Problems 1, 2, 3, 4, 6</div>
+</footer>
+
+</body>
+</html>
